@@ -54,6 +54,33 @@
         #feedback { display: none; margin-top: 20px; padding: 20px; border: 3px solid var(--oro); background: white; border-radius: 10px; }
         .reporte-lista { text-align: left; list-style: none; padding: 0; }
         .reporte-lista li { padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.1); }
+
+        /* --- NUEVOS ESTILOS PARA SOPHIE --- */
+        .recuadro-dorado {
+            border: 5px solid var(--oro);
+            box-shadow: 0 0 20px var(--oro);
+            margin: 20px auto;
+            padding: 10px;
+            background: #fff;
+            max-width: 80%;
+            border-radius: 8px;
+        }
+        .aviso-contador {
+            font-weight: bold;
+            color: var(--sangre);
+            text-align: center;
+            margin: 10px 0;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+        }
+        .instrucciones-mision {
+            background: rgba(255, 255, 255, 0.6);
+            border-left: 5px solid var(--oro-viejo);
+            padding: 15px;
+            margin: 20px 0;
+            text-align: left;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
@@ -83,6 +110,20 @@
     <div id="area-trabajo" style="display:none">
         <button onclick="irAlMapa()" style="color:var(--sangre); cursor:pointer; background:none; border:none; font-weight:bold; font-family:'MedievalSharp'; margin-bottom:15px;">⬅ VOLVER AL MAPA</button>
         <h2 id="titulo-mision" style="text-align:center; color:var(--sangre);"></h2>
+
+        <div class="recuadro-dorado" id="espacio-imagen">
+            <p style="text-align:center; color:#8d6e63;">[Imagen de la Misión]</p>
+        </div>
+
+        <div class="aviso-contador">
+            ⚠️ Una vez iniciado el contador no se detiene
+        </div>
+
+        <div class="instrucciones-mision" id="contenedor-instrucciones">
+            <strong>📜 Instrucciones:</strong>
+            <div id="texto-instrucciones" style="margin-top:10px;"></div>
+        </div>
+
         <div id="descarga-container" style="text-align:center;"></div>
         <div class="zona-entrega">
             <input type="file" id="archivoInput" accept=".docx"><br><br>
@@ -102,130 +143,72 @@ const misiones = [
     id: "M1", 
     titulo: "El Edicto: Configuración Real", 
     icono: "📜", 
-    // Estas son las "marcas" que Mammoth busca en el código del documento
     objs: ["sectpr", "page-break", "header", "pgnum", "margin"], 
-    nombres: [
-        "Márgenes Personalizados", 
-        "Orientación Horizontal", 
-        "Saltos de Sección", 
-        "Encabezado Diferente", 
-        "Numeración (Inicia en 3)"
-    ], 
+    nombres: ["Márgenes Personalizados", "Orientación Horizontal", "Saltos de Sección", "Encabezado Diferente", "Numeración (Inicia en 3)"], 
+    instrucciones: "Aplica márgenes personalizados, cambia la orientación a horizontal solo en una sección, inserta saltos de sección, configura un encabezado diferente en la primera página y haz que la numeración inicie en 3.",
     url: "https://docs.google.com/uc?export=download&id=1evvJUB2Ifdsipq5u73G_CaW_hDHw92hB" 
 },
     { 
     id: "M2", 
     titulo: "El Censo: Estilos y Referencias", 
     icono: "👥", 
-    // Etiquetas técnicas para: Títulos (h1, h2), Tabla de contenido (toc), 
-    // Interlineado/Párrafo (p) y Nota al pie (footnote)
     objs: ["h1", "h2", "toc", "line-height", "footnote"], 
-    nombres: [
-        "Estilo Título 1 aplicado", 
-        "Estilo Título 2 aplicado", 
-        "Tabla de contenido generada", 
-        "Interlineado modificado", 
-        "Nota al pie insertada"
-    ], 
+    nombres: ["Estilo Título 1 aplicado", "Estilo Título 2 aplicado", "Tabla de contenido generada", "Interlineado modificado", "Nota al pie insertada"], 
+    instrucciones: "Aplica estilos Título 1 y 2, modifica un estilo existente, genera una tabla de contenido automática, ajusta el interlineado exacto e inserta una nota al pie.",
     url: "https://docs.google.com/uc?export=download&id=147rbZMsvrlq4B-q4B5LEa3NyAOW9Y9S9" 
 },
     { 
     id: "M3", 
     titulo: "El Censo: Tablas y Cálculos", 
     icono: "📊", 
-    // Etiquetas para: tabla (table), celdas combinadas (vmerge/gridspan), 
-    // fórmulas (field), orden/estilo (style/thead)
     objs: ["table", "tr-style", "vmerge", "sort", "field", "thead"], 
-    nombres: [
-        "Insertar Tabla", 
-        "Estilo Personalizado", 
-        "Celdas Combinadas", 
-        "Orden de Datos", 
-        "Fórmula (Suma/Promedio)", 
-        "Repetición de Encabezados"
-    ], 
+    nombres: ["Insertar Tabla", "Estilo Personalizado", "Celdas Combinadas", "Orden de Datos", "Fórmula (Suma/Promedio)", "Repetición de Encabezados"], 
+    instrucciones: "Inserta una tabla, aplica un estilo personalizado, combina celdas, ordena los datos, inserta una fórmula (Suma o Promedio) y configura la repetición de filas de encabezado.",
     url: "https://docs.google.com/uc?export=download&id=1I_eWG3OpaFzlhanIiAlYfh3LF-oXQ_8h" 
 },
     { 
     id: "M4", 
     titulo: "El Espacio: Gráficos y Arte", 
     icono: "🚀", 
-    // Etiquetas para: imagen (img), ajuste/alineación (wrap/align), 
-    // efectos/SmartArt (drawing/diagram) y WordArt (vml/textpath)
     objs: ["img", "drawing", "diagram", "color-map", "3d-scene", "textpath", "align-center"], 
-    nombres: [
-        "Imagen Insertada", 
-        "Ajuste de Texto 'Cuadrado'", 
-        "Efecto Artístico Aplicado", 
-        "SmartArt de Ciclo Insertado", 
-        "Diseño Multicolor y 3D", 
-        "WordArt 'PROYECTO ESPACIAL'", 
-        "Alineación Centrada de Objetos"
-    ], 
+    nombres: ["Imagen Insertada", "Ajuste de Texto 'Cuadrado'", "Efecto Artístico Aplicado", "SmartArt de Ciclo Insertado", "Diseño Multicolor y 3D", "WordArt 'PROYECTO ESPACIAL'", "Alineación Centrada de Objetos"], 
+    instrucciones: "Inserta una imagen del espacio con ajuste cuadrado y efecto artístico. Añade un SmartArt de ciclo en 3D/multicolor, un WordArt superior y alinea todo al centro.",
     url: "https://docs.google.com/uc?export=download&id=1xi816rekK44uO840YB1NZHpRGf6_VKLv" 
 },
     { 
     id: "M5", 
     titulo: "Sustentabilidad: Diseño de Informe", 
     icono: "🌿", 
-    // Etiquetas para: Tema/Colores (theme/clr-scheme), Marca de agua (v-shape/powerplus), 
-    // Bordes (pg-borders) y Portada (doc-parts/cover)
     objs: ["theme", "clr-scheme", "powerplus", "pg-borders", "doc-parts", "sustentabilidad"], 
-    nombres: [
-        "Tema Orgánico/Integral aplicado", 
-        "Paleta de Colores (Verde/Bosque)", 
-        "Marca de Agua 'PROYECTO VERDE'", 
-        "Bordes de Página (Verde Oscuro)", 
-        "Portada Predefinida Insertada", 
-        "Título: Informe de Sustentabilidad"
-    ], 
+    nombres: ["Tema Orgánico/Integral aplicado", "Paleta de Colores (Verde/Bosque)", "Marca de Agua 'PROYECTO VERDE'", "Bordes de Página (Verde Oscuro)", "Portada Predefinida Insertada", "Título: Informe de Sustentabilidad"], 
+    instrucciones: "Aplica el tema Orgánico, cambia la paleta a Verdes, inserta la marca de agua 'PROYECTO VERDE', añade bordes de página y una portada personalizada.",
     url: "https://docs.google.com/uc?export=download&id=1NdUfZM8RiX3nIlyfcZtZvdgHjsPEBd7C" 
 },
     { 
     id: "M6", 
     titulo: "Seguridad: Configuración de Sistema", 
     icono: "⚙️", 
-    // Etiquetas para: Autotexto (glossary), Fuentes incrustadas (font-embed), 
-    // Autorrecuperación/Metadatos (auto-recovery) y Panel de Navegación (view-setting)
     objs: ["glossary", "psi", "font-embed", "recovery-2", "navigation-pane"], 
-    nombres: [
-        "Comando de Acceso Rápido Configurado", 
-        "Autotexto 'PSI' Creado y Usado", 
-        "Fuentes Incrustadas en el Archivo", 
-        "Autorrecuperación cada 2 Minutos", 
-        "Panel de Navegación Activado"
-    ], 
+    nombres: ["Comando de Acceso Rápido Configurado", "Autotexto 'PSI' Creado y Usado", "Fuentes Incrustadas en el Archivo", "Autorrecuperación cada 2 Minutos", "Panel de Navegación Activado"], 
+    instrucciones: "Añade comandos de acceso rápido, crea un Autotexto 'PSI', incrusta las fuentes en el archivo y configura la autorrecuperación cada 2 minutos.",
     url: "https://docs.google.com/uc?export=download&id=1L9eYGdN1mH2sSz9Q5hBeHrS39MEWzwf3" 
 },
    { 
     id: "M7", 
     titulo: "Criptografía: El Acta Final", 
     icono: "🛡️", 
-    // Etiquetas para: Limpieza de metadatos (core-props), Cifrado (encryption) 
-    // y rastro de exportación (pdf-convert)
     objs: ["no-author", "encrypted", "Admin2026", "pdf-trace"], 
-    nombres: [
-        "Metadatos e Información Personal eliminados", 
-        "Documento Cifrado con Contraseña", 
-        "Clave 'Admin2026' correcta", 
-        "Rastro de Exportación a PDF detectado"
-    ], 
+    nombres: ["Metadatos e Información Personal eliminados", "Documento Cifrado con Contraseña", "Clave 'Admin2026' correcta", "Rastro de Exportación a PDF detectado"], 
+    instrucciones: "Inspecciona y limpia metadatos, protege el documento con la contraseña 'Admin2026' y expórtalo a PDF (sube el .docx aquí).",
     url: "https://docs.google.com/uc?export=download&id=1P8F6o5adlFbbaqqkEN2mVxBRmXLuzan4" 
 },
     { 
     id: "M8", 
     titulo: "La Gran Final: Bibliografía Real", 
     icono: "🕊️", 
-    // Etiquetas para: Interlineado exacto (line-height), Sangría francesa (hanging), 
-    // Salto de página (page-break), Bordes (border-bottom) y Vista (split-view)
     objs: ["line-height: 18pt", "hanging", "page-break", "border-bottom", "split"], 
-    nombres: [
-        "Interlineado Exacto (18 pto)", 
-        "Sangría Francesa (1.25 cm)", 
-        "Salto de Página insertado", 
-        "Borde Inferior Rojo en Título", 
-        "Ventana Dividida (Vista)"
-    ], 
+    nombres: ["Interlineado Exacto (18 pto)", "Sangría Francesa (1.25 cm)", "Salto de Página insertado", "Borde Inferior Rojo en Título", "Ventana Dividida (Vista)"], 
+    instrucciones: "Configura interlineado exacto de 18pto, aplica sangría francesa, inserta salto de página, añade borde inferior rojo y usa la vista dividida.",
     url: "https://docs.google.com/uc?export=download&id=1j3YyRbJyKpofRWgcsx3JGd91LPGWEL34" 
 },
 ];
@@ -255,6 +238,10 @@ function abrirMision(i) {
     document.getElementById('pantalla-mapa').style.display = 'none';
     document.getElementById('area-trabajo').style.display = 'block';
     document.getElementById('titulo-mision').innerText = m.titulo;
+
+    // ACTUALIZA LAS INSTRUCCIONES DINÁMICAMENTE
+    document.getElementById('texto-instrucciones').innerHTML = m.instrucciones;
+
     document.getElementById('descarga-container').innerHTML = `<a href="${m.url}" class="btn btn-descarga">📥 BAJAR PERGAMINO ${m.id}</a>`;
     document.getElementById('feedback').style.display = 'none';
     if(!cronoInterval) cronoInterval = setInterval(() => { segundosTotales++; document.getElementById('timer').innerText = formatTimer(segundosTotales); }, 1000);
@@ -278,7 +265,7 @@ async function enviarAAppSheet(equipo, misionId, calif, tiempo) {
 async function procesarEntrega() {
     const fileInput = document.getElementById('archivoInput');
     if(!fileInput.files[0]) return alert("¡Sube tu pergamino!");
-    clearInterval(cronoInterval); cronoInterval = null; // Detiene cronómetro
+    clearInterval(cronoInterval); cronoInterval = null; 
     const reader = new FileReader();
     reader.onload = async (e) => {
         const { value: html } = await mammoth.convertToHtml({ arrayBuffer: e.target.result });
